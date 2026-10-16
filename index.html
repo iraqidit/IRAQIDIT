@@ -1,9 +1,91 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b0b0d"><title>IRAQIDIT — Production Reports</title><link rel="stylesheet" href="style.css"></head>
-<body><header class="topbar"><a class="brand" href="#"><span class="mark">IQ<span>·</span></span><span><b>IRAQIDIT</b><small>DATA · IMAGE · TRUST</small></span></a><button class="outline" id="manage">Manage reports ↗</button></header>
-<main class="shell"><section class="hero"><div class="eyebrow">— DIGITAL IMAGING TECHNICIAN / REPORTING PORTAL</div><h1>Every frame.<br><em>Accounted for.</em></h1><p>A clear overview of production media, daily footage and backup status — all in one place.</p><div class="meta">● REPORTING SYSTEM <span>IRAQ · FILM & COMMERCIAL PRODUCTION</span></div></section>
-<section class="stats"><article><label>PROJECTS</label><strong id="nProjects">03</strong><small>Projects in portfolio</small></article><article><label>SHOOTING DAYS</label><strong id="nDays">12</strong><small>Across all projects</small></article><article><label>TOTAL CLIPS</label><strong id="nClips">1,284</strong><small>Manually reported</small></article><article><label>DATA MANAGED</label><strong id="nTB">8.6 <i>TB</i></strong><small>Reported media volume</small></article></section>
-<div class="section-head"><div><div class="eyebrow">PORTFOLIO / 01</div><h2>Production reports</h2></div><div class="tools"><input id="search" placeholder="Search projects…"><button class="gold" id="add">＋ New project</button></div></div><section id="projects" class="projects"></section>
-<aside class="note"><b>✳ &nbsp; Clear records. Confident handover.</b><p>This portal displays report information entered by the DIT. Only mark media as verified after checks are complete.</p></aside><footer>© <span id="year"></span> IRAQIDIT <span>BUILT FOR THE DETAILS THAT MATTER.</span></footer></main>
-<dialog id="editor"><form id="form"><div class="dialog-head"><div><div class="eyebrow">REPORT EDITOR</div><h2 id="formTitle">New project</h2></div><button type="button" class="close" data-close="editor">×</button></div><input type="hidden" id="pid"><label>Project name<input id="name" required placeholder="e.g. Project Alpha"></label><div class="two"><label>Client / production<input id="client" placeholder="Production company"></label><label>Camera system<input id="camera" value="Sony VENICE"></label></div><div class="two"><label>Shooting days<input id="days" type="number" min="0" value="1" required></label><label>Total clips<input id="clips" type="number" min="0" value="0" required></label></div><div class="two"><label>Data volume (TB)<input id="tb" type="number" min="0" step="0.01" value="0"></label><label>Backup status<select id="status"><option>Pending</option><option>In progress</option><option>Verified</option></select></label></div><label>Notes<textarea id="notes" rows="3" placeholder="Daily notes, handover, exceptions…"></textarea></label><div class="form-actions"><small>Demo: changes are saved in this browser only.</small><button class="gold" type="submit">Save report</button></div></form></dialog>
-<dialog id="report"><div class="report-view"><div class="dialog-head"><div><div class="eyebrow">CLIENT REPORT</div><h2 id="reportTitle"></h2></div><button class="close" data-close="report">×</button></div><div id="reportBody"></div><div class="form-actions"><button class="outline" id="print">Print / Save PDF</button><button class="gold" id="editReport">Edit report</button></div><p class="hint">Prototype only: this report is not yet a live shared client link.</p></div></dialog><script src="app.js"></script></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#031014">
+  <title>DIT Film — Production Reports</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="DIT Film home"><span class="brand-mark">▶</span><span>DIT Film</span></a>
+    <nav class="topnav">
+      <button class="nav-link active" data-view="home">Home</button>
+      <button class="nav-link" data-view="projects">Projects</button>
+      <button class="nav-link" data-view="reports">Reports</button>
+      <button class="nav-link" data-view="about">About</button>
+    </nav>
+    <button class="admin-pill" id="adminButton"><span class="avatar">A</span> Admin⌄</button>
+  </header>
+
+  <main>
+    <section class="view active" id="view-home">
+      <div class="home-grid">
+        <article class="hero panel">
+          <div class="hero-photo"></div><div class="hero-shade"></div>
+          <div class="hero-copy">
+            <div class="eyebrow">YOUR FILM PRODUCTION REPORTS</div>
+            <h1>Track. Manage.<br><span>Share.</span></h1>
+            <p>All your film projects in one place. Update your data,<br class="desktop-only"> see real-time reports, and share them with your clients — beautifully.</p>
+            <div class="actions"><button class="btn primary" data-view="projects">View Projects <b>→</b></button><button class="btn ghost" data-view="projects">Go to Dashboard</button></div>
+          </div>
+          <div class="hero-features">
+            <div><i>◴</i><span><b>Real-time Updates</b><small>Your changes appear instantly</small></span></div>
+            <div><i>▣</i><span><b>Beautiful Reports</b><small>Clean & professional design</small></span></div>
+            <div><i>♧</i><span><b>All Projects</b><small>One place, easy to manage</small></span></div>
+          </div>
+        </article>
+        <section class="projects-panel panel">
+          <div class="section-title"><div><h2><span class="mini-mark">▶</span> Projects</h2><p>Manage all your film projects in one place.</p></div><button class="btn primary small" id="addProjectTop">＋ Add Project</button></div>
+          <div class="project-grid" id="projectGrid"></div>
+        </section>
+        <section class="dashboard panel">
+          <aside class="sidebar">
+            <button class="side-link selected" data-view="projects">▦　Dashboard</button><button class="side-link" data-view="projects">▣　Projects</button><button class="side-link" id="sideAdd">＋　Add Project</button><button class="side-link" data-view="reports">▤　Reports</button><button class="side-link" data-view="about">⚙　Settings</button>
+            <div class="side-brand"><span class="brand-mark">▶</span><span>DIT Film<small>Production Reports</small></span></div>
+          </aside>
+          <div class="dashboard-content">
+            <div class="project-summary">
+              <img id="summaryImage" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=300&q=80" alt="Mountain landscape">
+              <div class="summary-name"><h3 id="summaryName">The Last Mountain</h3><p id="summaryMeta">Feature Film · 2026</p></div><span class="status" id="summaryStatus">In Progress</span>
+              <button class="btn primary small share-inline" id="shareMain">♧ Share Report</button>
+              <small class="updated">Last Update<br><span id="updatedAt">Oct 16, 2026 · 3:20 PM</span></small>
+            </div>
+            <div class="metric-grid">
+              <div class="metric"><label>Total Clips</label><strong id="totalClips">1,240</strong><small>↑ <span id="clipDelta">20</span> today</small></div>
+              <div class="metric"><label>Days of Shooting</label><strong id="totalDays">12</strong><small>↑ 1 today</small></div>
+              <div class="metric"><label>Data Size</label><strong id="totalData">8.4 TB</strong><small>↑ 0.6 TB today</small></div>
+              <div class="metric"><label>Data Loaded</label><strong id="totalDisks">18</strong><small>↑ 3 today</small></div>
+              <div class="metric"><label>Backup Status</label><strong class="green">◉ On Track</strong><small>All copies verified</small></div>
+            </div>
+            <div class="analytics-grid">
+              <div class="chart-card"><h4>Clips Progress</h4><div class="line-chart"><svg viewBox="0 0 320 118" role="img" aria-label="Clips progress line chart"><path class="chart-grid" d="M24 15H310 M24 42H310 M24 69H310 M24 96H310"/><path class="chart-area" d="M24 94 L66 79 L106 68 L147 55 L188 43 L229 28 L270 17 L310 5 L310 105 L24 105Z"/><polyline points="24,94 66,79 106,68 147,55 188,43 229,28 270,17 310,5"/><g><circle cx="24" cy="94" r="3"/><circle cx="66" cy="79" r="3"/><circle cx="106" cy="68" r="3"/><circle cx="147" cy="55" r="3"/><circle cx="188" cy="43" r="3"/><circle cx="229" cy="28" r="3"/><circle cx="270" cy="17" r="3"/><circle cx="310" cy="5" r="3"/></g></svg><div class="axis"><span>Day 1</span><span>Day 3</span><span>Day 5</span><span>Day 7</span><span>Day 9</span><span>Day 12</span></div></div></div>
+              <div class="chart-card"><h4>Data by Type</h4><div class="donut-wrap"><div class="donut"><div><b id="donutTotal">8.4 TB</b></div></div><div class="legend"><span>● RAW <b>56%</b></span><span>● ProRes <b>25%</b></span><span>● Proxy <b>13%</b></span><span>● Other <b>6%</b></span></div></div></div>
+              <div class="chart-card activity"><h4>Recent Activity</h4><div class="activity-item"><i>●</i><span>Added 30 clips (today)</span><time>3:20 PM</time></div><div class="activity-item"><i>●</i><span>Updated data size</span><time>2:10 PM</time></div><div class="activity-item"><i>●</i><span>Added shooting day</span><time>10:45 AM</time></div><div class="activity-item good"><i>●</i><span>Backup completed</span><time>8:30 AM</time></div></div>
+            </div>
+            <div class="table-card"><div class="table-head"><h4>Shooting Days</h4><button class="btn primary tiny" id="addDayBtn">＋ Add Shooting Day</button></div><div class="table-scroll"><table><thead><tr><th>Date</th><th>Location</th><th>Clips</th><th>Data Size</th><th>Notes</th></tr></thead><tbody id="daysTable"></tbody></table></div></div>
+          </div>
+        </section>
+        <section class="report-banner panel"><div class="banner-image"></div><div class="banner-content"><div class="eyebrow">PRODUCTION REPORT</div><h2 id="bannerName">The Last Mountain</h2><p>A journey through nature, captured in every frame.</p><span class="status">In Progress</span></div><button class="btn ghost share-banner" id="shareBanner">♧ Share report</button></section>
+        <section class="mobile-preview panel"><div class="phone"><div class="phone-top">9:41　● ● ●</div><div class="phone-brand"><span class="brand-mark">▶</span> DIT Film</div><img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=300&q=80" alt="Mountain project"><h4>The Last Mountain</h4><span class="status">In Progress</span><div class="phone-metrics"><div>Total Clips<strong>1,240</strong></div><div>Days<strong>12</strong></div><div>Data Size<strong>8.4 TB</strong></div></div><div class="phone-chart"></div><div class="phone-bottom">⌂　▣　▤　♙</div></div></section>
+        <section class="login-panel panel"><div class="login-photo"></div><div class="login-content"><span class="brand-mark big">▶</span><h2>DIT Film</h2><h3>Welcome Back</h3><p>Sign in to your account</p><label>Email or username<input id="loginUser" placeholder="Email or username"></label><label>Password<input id="loginPass" type="password" placeholder="Password"></label><button class="btn primary login-btn" id="loginBtn">Sign In</button><small id="loginNote">DIT Film · Production Reports<br>All your projects. One place.</small></div></section>
+      </div>
+    </section>
+
+    <section class="view" id="view-projects"><div class="page-heading"><div><div class="eyebrow">WORKSPACE</div><h1>All Projects</h1><p>Manage production details and shooting-day records.</p></div><button class="btn primary" id="addProjectPage">＋ Add Project</button></div><div class="project-grid large" id="allProjectsGrid"></div></section>
+    <section class="view" id="view-reports"><div class="page-heading"><div><div class="eyebrow">CLIENT HANDOVER</div><h1>Production Reports</h1><p>Review a project and open a clean, printable report.</p></div></div><div class="report-list" id="reportList"></div></section>
+    <section class="view" id="view-about"><div class="page-heading"><div><div class="eyebrow">PREFERENCES</div><h1>Settings & About</h1><p>DIT Film production reporting workspace.</p></div></div><div class="settings-card panel"><h2>About this build</h2><p>This is the visual prototype for your DIT reporting portal. Project data currently saves in this browser only.</p><p><b>Important:</b> to make edits sync across your devices and let clients see updates through a shared link, the site needs a secure shared database and access rules.</p><button class="btn ghost" id="exportData">Export project data (JSON)</button></div></section>
+  </main>
+</div>
+
+<dialog id="projectDialog" class="modal"><form id="projectForm" method="dialog"><div class="modal-head"><div><div class="eyebrow">PROJECT SETUP</div><h2 id="projectModalTitle">Add Project</h2></div><button type="button" class="close" data-close="projectDialog">×</button></div><input type="hidden" id="projectId"><label>Project name<input id="projectName" required placeholder="e.g. The Last Mountain"></label><div class="form-row"><label>Production type<input id="projectType" placeholder="Feature Film"></label><label>Year<input id="projectYear" type="number" value="2026"></label></div><div class="form-row"><label>Status<select id="projectStatus"><option>In Progress</option><option>Planning</option><option>Completed</option><option>On Hold</option></select></label><label>Total clips<input id="projectClips" type="number" min="0" value="0"></label></div><div class="form-row"><label>Shooting days<input id="projectDays" type="number" min="0" value="0"></label><label>Data size (TB)<input id="projectData" type="number" min="0" step="0.1" value="0"></label></div><div class="form-row"><label>Disks used<input id="projectDisks" type="number" min="0" value="0"></label><label>Backup status<select id="projectBackup"><option>On Track</option><option>In Progress</option><option>Needs Attention</option></select></label></div><label>Cover image URL (optional)<input id="projectImage" placeholder="https://…"></label><label>Client notes<textarea id="projectNotes" rows="3" placeholder="Notes to include in the report"></textarea></label><div class="modal-actions"><button type="button" class="btn ghost" data-close="projectDialog">Cancel</button><button class="btn primary" type="submit">Save Project</button></div></form></dialog>
+
+<dialog id="dayDialog" class="modal"><form id="dayForm" method="dialog"><div class="modal-head"><div><div class="eyebrow">DAILY REPORT</div><h2>Add Shooting Day</h2></div><button type="button" class="close" data-close="dayDialog">×</button></div><label>Project<select id="dayProject"></select></label><div class="form-row"><label>Date<input id="dayDate" type="date" required></label><label>Location<input id="dayLocation" required placeholder="Mountain Ridge"></label></div><div class="form-row"><label>Number of clips<input id="dayClips" type="number" min="0" required value="0"></label><label>Data size (TB)<input id="dayData" type="number" min="0" step="0.1" required value="0"></label></div><label>Disks used<input id="dayDisks" type="number" min="0" value="0"></label><label>Notes<textarea id="dayNotes" rows="3" placeholder="Morning shots, good weather…"></textarea></label><div class="modal-actions"><button type="button" class="btn ghost" data-close="dayDialog">Cancel</button><button class="btn primary" type="submit">Save & Update</button></div></form></dialog>
+
+<dialog id="reportDialog" class="modal report-modal"><div id="reportContent"></div><div class="modal-actions no-print"><button class="btn ghost" data-close="reportDialog">Close</button><button class="btn primary" id="printReport">Print / Save PDF</button></div></dialog>
+<dialog id="shareDialog" class="modal"><div class="modal-head"><div><div class="eyebrow">SHARE REPORT</div><h2>Share a project report</h2></div><button type="button" class="close" data-close="shareDialog">×</button></div><p class="muted">This prototype can copy the current page address. It does not yet create a private client link or sync data between devices.</p><label>Page address<input id="shareUrl" readonly></label><div class="modal-actions"><button class="btn ghost" data-close="shareDialog">Cancel</button><button class="btn primary" id="copyShare">Copy address</button></div></dialog>
+<script src="app.js"></script>
+</body>
+</html>
